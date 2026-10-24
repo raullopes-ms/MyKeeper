@@ -12,7 +12,9 @@ export async function getAllVaults(
     const { vaults } = await getAllVaultUseCase.execute({
       userId: request.user.sub,
     });
-    return reply.status(200).send({ vaults });
+    return reply.status(200).send({ vaults: {
+      ...vaults
+    }});
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       return reply.status(401).send({ message: error.message });

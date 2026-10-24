@@ -4,6 +4,7 @@ import { UnauthorizedError } from "../errors/unauthorized-error";
 import { UserInactiveError } from "../errors/user-inactive-error";
 import { VaultNotOwnedByUserError } from "../errors/vault-not-owned-by-user-error";
 import { Vault } from "@/prisma/client";
+import { encrypt } from "@/utils/encryption";
 
 interface UpdateVaultUseCaseRequest {
   id: string;
@@ -48,7 +49,7 @@ export class UpdateVaultUseCase {
     const vault = await this.vaultsRepository.update(id, userId, {
       title,
       username,
-      passwordEncrypted: password,
+      passwordEncrypted: password ? encrypt(password) : undefined,
       url,
       notes,
     });

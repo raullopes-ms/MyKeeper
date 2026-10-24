@@ -36,5 +36,6 @@ export async function createVault(
     if (error instanceof UserInactiveError) {
       return reply.status(403).send({ message: error.message });
     }
+    throw error;
   }
 }

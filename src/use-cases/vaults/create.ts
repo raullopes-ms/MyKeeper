@@ -3,6 +3,7 @@ import { UsersRepository } from "@/repositories/users-repository";
 import { VaultsRepository } from "@/repositories/vaults-repository";
 import { UnauthorizedError } from "../errors/unauthorized-error";
 import { UserInactiveError } from "../errors/user-inactive-error";
+import { encrypt } from "@/utils/encryption";
 
 interface CreateVaultUseCaseRequest {
   title: string;
@@ -38,7 +39,7 @@ export class CreateVaultUseCase {
     const vault = await this.vaultsRepository.create({
       title,
       username,
-      passwordEncrypted: password,
+      passwordEncrypted: encrypt(password),
       url,
       notes,
       userId,
