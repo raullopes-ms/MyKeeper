@@ -1,0 +1,13 @@
+import { verifyJwt } from "@/http/middlewares/verify-jwt";
+import { FastifyInstance } from "fastify";
+import { createVault } from "./create";
+import { deleteVault } from "./delete";
+import { getAllVaults } from "./getAll";
+import { updateVault } from "./update";
+
+export async function vaultsRoutes(app: FastifyInstance) {
+  app.post("/vaults", { onRequest: [verifyJwt] }, createVault);
+  app.get("/vaults", { onRequest: [verifyJwt] }, getAllVaults);
+  app.patch("/vaults", { onRequest: [verifyJwt] }, updateVault);
+  app.delete("/vaults/:id", { onRequest: [verifyJwt] }, deleteVault);
+}
