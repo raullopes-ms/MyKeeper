@@ -5,6 +5,7 @@ import { env } from "./env";
 import { usersRoutes } from "./http/controllers/users/routes";
 import { vaultsRoutes } from "./http/controllers/vaults/routes";
 import fastifyRateLimit from "@fastify/rate-limit";
+import { AppError } from "./use-cases/errors/app-error";
 
 export const app = fastify();
 
@@ -28,6 +29,11 @@ app.setErrorHandler((error, request, reply) => {
     return reply.status(400).send({
       message: "Validation error",
       issues: z.treeifyError(error),
+    });
+  }
+  if (error instanceof AppError) {
+    return reply.status(error.statusCode).send({
+      message: error.message,
     });
   }
   return reply.status(500).send({

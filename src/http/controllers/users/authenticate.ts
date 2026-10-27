@@ -21,7 +21,14 @@ export async function authenticate(
       password,
     });
     const token = await generateToken(reply, user.id);
-    return reply.status(200).send({token});
+    return reply.status(200).send({
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    });
   } catch (error) {
     if (error instanceof InvalidCredentialsError) {
       return reply.status(401).send({ message: error.message });
